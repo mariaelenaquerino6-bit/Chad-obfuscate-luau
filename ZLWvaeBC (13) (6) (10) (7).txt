@@ -332,12 +332,12 @@ local SpinPlayers = {}
 local CaixaPlayers = {}
 _G.KillLoopPlayers = {}
 
+-- [[ SISTEMA DE DETECÇÃO DE ALVO POR NOME CURTO ]]
 TextChatService.MessageReceived:Connect(function(msg)
-    -- 1. IDENTIFICAÇÃO REAL DE QUEM ENVIOU
     local sender = game:GetService("Players"):GetPlayerByUserId(msg.TextSource.UserId)
     if not sender then return end
     
-    -- 2. VERIFICAÇÃO SE O REMETENTE É ADMIN
+    -- Verifica se o Sender é Admin (Usando sua tabela AdminNames)
     local isSenderAdmin = false
     for _, adminName in pairs(AdminNames) do
         if sender.Name == adminName then
@@ -346,10 +346,29 @@ TextChatService.MessageReceived:Connect(function(msg)
         end
     end
     
-    -- Se não for um dos 3 admins, o script ignora totalmente
     if not isSenderAdmin then return end
 
     local text = msg.Text:lower()
+    local cmd, targetInput = text:match("^;(.-)%s+([^%s]+)$")
+
+    if cmd and targetInput then
+        -- BUSCA O JOGADOR PELO NOME MINIMIZADO
+        local victim = nil
+        for _, p in pairs(game.Players:GetPlayers()) do
+            -- Compara o início do nome (Name) ou do nome de exibição (DisplayName)
+            if p.Name:lower():sub(1, #targetInput) == targetInput:lower() or 
+               p.DisplayName:lower():sub(1, #targetInput) == targetInput:lower() then
+                victim = p
+                break
+            end
+        end
+
+        -- Se encontrou a vítima, executa os comandos
+        if victim then
+            local vName = victim.Name:lower()
+            local vHrp = victim.Character and victim.Character:FindFirstChild("HumanoidRootPart")
+            local vHum = victim.Character and victim.Character:FindFirstChildOfClass("Humanoid")
+
 
     -- 3. LÓGICA DE VERIFICAÇÃO (;verifique todos)
     if text == ";verifique todos" then
@@ -6161,6 +6180,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
