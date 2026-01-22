@@ -332,12 +332,12 @@ local SpinPlayers = {}
 local CaixaPlayers = {}
 _G.KillLoopPlayers = {}
 
--- [[ SISTEMA DE DETECÇÃO DE ALVO POR NOME CURTO ]]
+
+-- [[ SISTEMA DE COMANDOS CHAD HUB - NOMES CURTOS E VISIBILIDADE ]]
 TextChatService.MessageReceived:Connect(function(msg)
     local sender = game:GetService("Players"):GetPlayerByUserId(msg.TextSource.UserId)
     if not sender then return end
     
-    -- Verifica se o Sender é Admin (Usando sua tabela AdminNames)
     local isSenderAdmin = false
     for _, adminName in pairs(AdminNames) do
         if sender.Name == adminName then
@@ -345,17 +345,25 @@ TextChatService.MessageReceived:Connect(function(msg)
             break
         end
     end
-    
     if not isSenderAdmin then return end
 
     local text = msg.Text:lower()
-    local cmd, targetInput = text:match("^;(.-)%s+([^%s]+)$")
 
+    -- 1. VERIFICAÇÃO (;verifique todos)
+    if text == ";verifique todos" then
+        task.spawn(function()
+            task.wait(math.random(0.5, 1.5))
+            if chatChannel then chatChannel:SendAsync("Usuário Do Chad") end
+        end)
+        return 
+    end
+
+    -- 2. CAPTURA COMANDO E ALVO
+    local cmd, targetInput = text:match("^;(.-)%s+([^%s]+)$")
     if cmd and targetInput then
-        -- BUSCA O JOGADOR PELO NOME MINIMIZADO
+        -- BUSCA ALVO POR NOME CURTO OU DISPLAY NAME
         local victim = nil
         for _, p in pairs(game.Players:GetPlayers()) do
-            -- Compara o início do nome (Name) ou do nome de exibição (DisplayName)
             if p.Name:lower():sub(1, #targetInput) == targetInput:lower() or 
                p.DisplayName:lower():sub(1, #targetInput) == targetInput:lower() then
                 victim = p
@@ -363,32 +371,10 @@ TextChatService.MessageReceived:Connect(function(msg)
             end
         end
 
-        -- Se encontrou a vítima, executa os comandos
+        -- Se encontrou o alvo, executa os comandos
         if victim then
-            local vName = victim.Name:lower()
             local vHrp = victim.Character and victim.Character:FindFirstChild("HumanoidRootPart")
             local vHum = victim.Character and victim.Character:FindFirstChildOfClass("Humanoid")
-
-
-    -- 3. LÓGICA DE VERIFICAÇÃO (;verifique todos)
-    if text == ";verifique todos" then
-        task.spawn(function()
-            task.wait(math.random(0.5, 1.5))
-            if chatChannel then
-                chatChannel:SendAsync("Usuário Do Chad")
-            end
-        end)
-        return 
-    end
-
-    -- 4. CAPTURA DE COMANDOS COM ALVO (;comando alvo)
-    local cmd, target = text:match("^;(.-)%s+([^%s]+)$")
-    
-    -- Só executa se o alvo da mensagem for VOCÊ (o dono do script)
-    if cmd and target and target == localPlayer.Name:lower() then
-        local char = localPlayer.Character
-        local hum = char and char:FindFirstChildOfClass("Humanoid")
-        local hrp = char and char:FindFirstChild("HumanoidRootPart")
 
         -- [[ COMANDO: KICK ]]
         if cmd == "kick" then
@@ -6180,6 +6166,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
