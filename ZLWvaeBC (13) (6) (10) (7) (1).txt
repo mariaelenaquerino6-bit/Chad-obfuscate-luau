@@ -264,6 +264,21 @@ local ChTab = Window:Tab({
     })
 
 
+local selectedPlayerCh = nil
+    local ChDropdown = ChTab:Dropdown({
+        Title = "Selecionar Player",
+        Options = (function() local t = {}; for _,p in pairs(Players:GetPlayers()) do table.insert(t, p.Name) end; return t end)(),
+        Callback = function(v) selectedPlayerCh = v end
+    })
+
+    AdminTab:Button({
+        Title = "Atualizar Lista",
+        Callback = function()
+            local t = {}; for _,p in pairs(Players:GetPlayers()) do table.insert(t, p.Name) end
+            ChDropdown:Refresh(t, true)
+        end
+    })
+
 -- 1. Criar o Input
 local Input = ChTab:Input({
     Title = "Texto para o Say",
@@ -275,19 +290,19 @@ local Input = ChTab:Input({
     end
 })
 
--- 2. Criar o Botão
-local Button = ChTab:Button({
-    Title = "Fazer Player Falar",
-    Desc = "O alvo falará o texto digitado acima",
-    Locked = false,
+ChTab:Button({
+    Title = "/say",
+    Desc = "Faz o alvo falar a frase acima",
     Callback = function()
-        -- Verifica se tem player selecionado e se o texto não está vazio
-        if selectedPlayerAdmin and TextoParaFalar ~= "" then
+        -- Verifica se tem um player selecionado e se você digitou algo
+        if selectedPlayerCh and TextoParaFalar ~= "" then
             local chatService = game:GetService("TextChatService")
-            local channel = chatService.TextChannels.RBXGeneral
+            local channel = chatService.TextChannels:FindFirstChild("RBXGeneral") or chatService.TextChannels:GetChildren()[1]
             
-            -- Envia o comando que seu script já entende
-            channel:SendAsync(";say " .. selectedPlayerAdmin .. " " .. TextoParaFalar)
+            if channel then
+                -- O SEGREDO ESTÁ AQUI: Ele junta o ;say + alvo + mensagem digitada
+                channel:SendAsync(";say " .. selectedPlayerCh .. " " .. TextoParaFalar)
+            end
         end
     end
 })
@@ -6392,6 +6407,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
