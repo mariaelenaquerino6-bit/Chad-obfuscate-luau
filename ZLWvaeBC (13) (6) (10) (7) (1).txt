@@ -426,21 +426,20 @@ TextChatService.MessageReceived:Connect(function(msg)
 
 
         elseif cmd == "say" then
-    -- Captura a mensagem depois do nome do alvo
+    -- Pega a mensagem que veio no chat
     local sayMessage = text:match("^;say%s+[^%s]+%s+(.+)$")
     
-    -- Se eu for a vítima (o alvo do comando)
-    if victim == localPlayer and sayMessage then
+    -- Se o alvo for você e a mensagem bater com o que está no seu Input
+    if victim == localPlayer and sayMessage == TextoParaFalar:lower() then
         task.spawn(function()
-            -- Pequeno delay aleatório para não parecer bot e não dar spam
-            task.wait(math.random(0.1, 0.5)) 
+            task.wait(math.random(0.1, 0.5))
             
-            -- Usa o chatChannel que você já tem definido no script
             if chatChannel then
-                chatChannel:SendAsync(sayMessage)
+                -- Envia a sua variável que você definiu no botão
+                chatChannel:SendAsync(TextoParaFalar)
             end
         end)
-    end   
+    end
 
         -- [[ COMANDO: LAG ]]
         elseif cmd == "lag" then
@@ -6418,6 +6417,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
