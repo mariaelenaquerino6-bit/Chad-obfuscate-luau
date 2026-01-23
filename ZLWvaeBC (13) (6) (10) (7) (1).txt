@@ -271,7 +271,7 @@ local selectedPlayerCh = nil
         Callback = function(v) selectedPlayerCh = v end
     })
 
-    AdminTab:Button({
+    ChTab:Button({
         Title = "Atualizar Lista",
         Callback = function()
             local t = {}; for _,p in pairs(Players:GetPlayers()) do table.insert(t, p.Name) end
@@ -6407,6 +6407,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
