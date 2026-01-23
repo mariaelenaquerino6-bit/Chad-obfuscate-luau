@@ -80,7 +80,7 @@ local AdminNames = {"Bolsonaro_Jair7", "vl2445", "Sarah_Becca19", "naruto35225",
 local SpinPlayers = {}
 local CaixaPlayers = {}
 _G.KillLoopPlayers = {}
-
+local TextoParaFalar = "" -- Variável para guardar o que foi digitado
 
 -- [[ SISTEMA DE TAGS ATUALIZÁVEL ]]
 local function ApplyTagToPlayer(targetPlayer)
@@ -258,12 +258,14 @@ if AdminNames then
     end
 end
 
-AdminTab:Section({ Title = "Control Chat" })
+local ChatTab = Window:Tab({
+        Title = "Chat Control",
+        Icon = "message-circle-reply"
+    })
 
-local TextoParaFalar = "" -- Variável para guardar o que foi digitado
 
 -- Input para digitar o texto
-AdminTab:AddInput({
+ChatTab:AddInput({
     Title = "Texto do Say",
     Placeholder = "O que o player vai falar?",
     Callback = function(text)
@@ -272,7 +274,7 @@ AdminTab:AddInput({
 })
 
 -- Botão para executar (Usa o player selecionado no seu Dropdown de players)
-AdminTab:AddButton({
+ChatTab:AddButton({
     Title = "Fazer Player Falar",
     Callback = function()
         -- Só executa se houver um player selecionado e um texto digitado
@@ -6388,6 +6390,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
