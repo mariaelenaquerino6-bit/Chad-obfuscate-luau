@@ -258,37 +258,36 @@ if AdminNames then
     end
 end
 
-local ChatTab = Window:Tab({
-        Title = "Chat Control",
-        Icon = "message-circle-reply"
-    })
 
+AdminTab:Section({ Title = "Chat Controle" })
 
--- Input para digitar o texto
-ChatTab:AddInput({
-    Title = "Texto do Say",
-    Placeholder = "O que o player vai falar?",
-    Callback = function(text)
-        TextoParaFalar = text
+-- 1. Criar o Input
+local Input = AdminTab:Input({
+    Title = "Texto para o Say",
+    Desc = "Digite o que o player vai falar",
+    Value = "",
+    Placeholder = "Escreva aqui...",
+    Callback = function(input) 
+        TextoParaFalar = input -- Salva o que você digitou na variável
     end
 })
 
--- Botão para executar (Usa o player selecionado no seu Dropdown de players)
-ChatTab:AddButton({
+-- 2. Criar o Botão
+local Button = AdminTab:Button({
     Title = "Fazer Player Falar",
+    Desc = "O alvo falará o texto digitado acima",
+    Locked = false,
     Callback = function()
-        -- Só executa se houver um player selecionado e um texto digitado
+        -- Verifica se tem player selecionado e se o texto não está vazio
         if selectedPlayerAdmin and TextoParaFalar ~= "" then
             local chatService = game:GetService("TextChatService")
             local channel = chatService.TextChannels.RBXGeneral
             
-            -- Envia o comando para o sistema do Chad Hub processar
+            -- Envia o comando que seu script já entende
             channel:SendAsync(";say " .. selectedPlayerAdmin .. " " .. TextoParaFalar)
         end
-        -- Notificação removida com sucesso.
     end
 })
-
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/mariaelenaquerino6-bit/Chad-hub/refs/heads/main/main.luau__2_%20(1).txt"))()
 
@@ -6390,6 +6389,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
