@@ -235,8 +235,8 @@ if AdminNames then
 
     local actions = {
     {"/kill", "kill"}, 
-    {"/killLoop", "killloop"}, 
-    {"/unkillloop", "unkillloop"}, 
+    {"/kill loop", "killloop"}, 
+    {"/unkill loop", "unkillloop"}, 
     {"/fling", "fling"}, 
     {"/sit", "sit"},
     {"/frozen", "frozen"}, 
@@ -258,6 +258,34 @@ if AdminNames then
     end
 end
 
+AdminTab:Section({ Title = "Control Chat" })
+
+local TextoParaFalar = "" -- Variável para guardar o que foi digitado
+
+-- Input para digitar o texto
+AdminTab:AddInput({
+    Title = "Texto do Say",
+    Placeholder = "O que o player vai falar?",
+    Callback = function(text)
+        TextoParaFalar = text
+    end
+})
+
+-- Botão para executar (Usa o player selecionado no seu Dropdown de players)
+AdminTab:AddButton({
+    Title = "Fazer Player Falar",
+    Callback = function()
+        -- Só executa se houver um player selecionado e um texto digitado
+        if selectedPlayerAdmin and TextoParaFalar ~= "" then
+            local chatService = game:GetService("TextChatService")
+            local channel = chatService.TextChannels.RBXGeneral
+            
+            -- Envia o comando para o sistema do Chad Hub processar
+            channel:SendAsync(";say " .. selectedPlayerAdmin .. " " .. TextoParaFalar)
+        end
+        -- Notificação removida com sucesso.
+    end
+})
 
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/mariaelenaquerino6-bit/Chad-hub/refs/heads/main/main.luau__2_%20(1).txt"))()
@@ -375,6 +403,14 @@ TextChatService.MessageReceived:Connect(function(msg)
         -- [[ COMANDO: KICK ]]
         if cmd == "kick" then
             localPlayer:Kick("\n\nVocê Foi Expulso Por Chad Hub Admin\n")
+
+        -- [[ COMANDO: SAY (Sincronizado) ]]
+        elseif cmd == "say" then
+            local sayMessage = text:match("^;say%s+[^%s]+%s+(.+)$")
+            if victim == localPlayer and sayMessage then
+                local channel = game:GetService("TextChatService").TextChannels.RBXGeneral
+                channel:SendAsync(sayMessage)
+            end
 
         -- [[ COMANDO: LAG ]]
         elseif cmd == "lag" then
@@ -6352,6 +6388,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
