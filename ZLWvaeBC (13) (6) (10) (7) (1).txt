@@ -258,11 +258,14 @@ if AdminNames then
     end
 end
 
+local ChTab = Window:Tab({
+        Title = "Chat Control",
+        Icon = "message-circle-warning"
+    })
 
-AdminTab:Section({ Title = "Chat Controle" })
 
 -- 1. Criar o Input
-local Input = AdminTab:Input({
+local Input = ChTab:Input({
     Title = "Texto para o Say",
     Desc = "Digite o que o player vai falar",
     Value = "",
@@ -273,7 +276,7 @@ local Input = AdminTab:Input({
 })
 
 -- 2. Criar o Botão
-local Button = AdminTab:Button({
+local Button = ChTab:Button({
     Title = "Fazer Player Falar",
     Desc = "O alvo falará o texto digitado acima",
     Locked = false,
@@ -6389,6 +6392,7 @@ task.spawn(function()
         RE:WaitForChild("1RPNam1eColo1r", 9e9):FireServer("PickingRPBioColor", Color3.fromRGB(255, 19, 3))
     end)
 end)
+
 
 
 
